@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Shotgun
   sprite: {fileID: 0}
-  thrust: 20
+  thrust: 100
   ammoCount: 2

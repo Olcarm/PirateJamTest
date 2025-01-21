@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Pistol
   sprite: {fileID: 0}
-  thrust: 20
+  thrust: 50
   ammoCount: 7
