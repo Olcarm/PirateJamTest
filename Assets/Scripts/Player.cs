@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -15,6 +16,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private WeaponVisual weaponVisual;
 
+    [SerializeField]
+    private Transform lastCheckpoint;
+
     float currentAmmo;
     float maxAmmo;
 
@@ -24,6 +28,8 @@ public class Player : MonoBehaviour
     bool isTempWeapon;
 
     float timer;
+
+    
 
     /*
         [SerializeField]
@@ -78,9 +84,21 @@ public class Player : MonoBehaviour
         {
             collectible.Collect();
         }
-        Debug.Log("Confused");
         if(other.tag == "Confused"){
             weaponVisual.SetConfused();
+        }
+        if(other.TryGetComponent<Checkpoint>(out Checkpoint checkpoint)){
+            lastCheckpoint = checkpoint.GetRespawnPoint();
+        }
+        if(other.tag == "Respawn"){
+            if(lastCheckpoint != null){
+                transform.position = lastCheckpoint.position;
+                gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
+            else{
+                transform.position = new Vector3(0, 0, 10);
+                gameObject.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D other) {
