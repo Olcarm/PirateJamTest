@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody2D rb2D;
     Vector2 mousePos;
+    [SerializeField]
+    WeaponVisual weaponVisual;
 
     void Start()
     {
@@ -14,9 +16,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Shoot(WeaponSO weaponSO)
     {
-        mousePos = Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
-        Vector2 forceVector = mousePos - (Vector2)transform.position;
+        Vector2 forceVector = weaponVisual.GetRotation();
         rb2D.AddForce(-forceVector.normalized * weaponSO.thrust, ForceMode2D.Impulse);
-        //Debug.Log("Attacked: " + -forceVector.normalized * weaponSO.thrust);
+        Debug.Log("Attacked: " + -forceVector.normalized * weaponSO.thrust);
     }
 }

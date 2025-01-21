@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private WeaponSO startingWeapon;
 
+    [SerializeField]
+    private WeaponVisual weaponVisual;
+
     float currentAmmo;
     float maxAmmo;
 
@@ -74,6 +77,15 @@ public class Player : MonoBehaviour
         if (other.TryGetComponent<ICollectible>(out ICollectible collectible))
         {
             collectible.Collect();
+        }
+        Debug.Log("Confused");
+        if(other.tag == "Confused"){
+            weaponVisual.SetConfused();
+        }
+    }
+    private void OnTriggerExit2D(Collider2D other) {
+        if(other.tag == "Confused"){
+            weaponVisual.SetConfused();
         }
     }
     public void SetupWeapon(WeaponSO weapon, float duration)
