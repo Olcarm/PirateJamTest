@@ -17,6 +17,6 @@ public class PlayerMovement : MonoBehaviour
         mousePos = Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
         Vector2 forceVector = mousePos - (Vector2)transform.position;
         rb2D.AddForce(-forceVector.normalized * weaponSO.thrust, ForceMode2D.Impulse);
-        Debug.Log("Attacked: " + -forceVector.normalized * weaponSO.thrust);
+        //Debug.Log("Attacked: " + -forceVector.normalized * weaponSO.thrust);
     }
 }
