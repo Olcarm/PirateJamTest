@@ -2,45 +2,83 @@ using UnityEngine;
 
 public class WeaponVisual : MonoBehaviour
 {
-    Vector3 mousePos;
-    Vector3 objectPos;
-    float angle;
-    float rotation = 0;
+    private Vector3 mousePos;
+    private Vector3 objectPos;
+    private float angle;
+    private float rotation = 0;
 
     [SerializeField]
-    float rotationPerSecond;
+    private float rotationPerSecond;
+    [SerializeField]
+    private Rigidbody2D rb2D;
+    [SerializeField]
+    float torque = 500f;
+    [SerializeField]
+    float maxAngularVelocity = 100f;
 
-    bool confused = false;
+
+
+    private bool confused = false;
+
     public void SetConfused()
     {
         confused = !confused;
         Debug.Log("Entered confused area");
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!confused)
         {
-            mousePos = Input.mousePosition;
-            mousePos.z = 20f;
-            objectPos = Camera.main.WorldToScreenPoint(transform.position);
-            mousePos.x = mousePos.x - objectPos.x;
-            mousePos.y = mousePos.y - objectPos.y;
-            angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle);
+            HandleNormalState();
         }
-        else{
-            ConfusedState();
+        else
+        {
+            HandleConfusedState();
+        }
+    }
+
+    private void HandleNormalState()
+    {
+        UpdateMousePosition();
+        RotateTowardsMouse();
+    }
+
+    private void UpdateMousePosition()
+    {
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPosition.z = 0;
+        mousePos = mouseWorldPosition;
+    }
+
+    private void RotateTowardsMouse()
+    {
+        Vector2 direction = (mousePos - transform.position).normalized;
+        /*
+        rb2D.rotation = angle;
+        */
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float horizontal = Input.GetAxis("Horizontal");
+        rb2D.AddTorque(-torque * horizontal);
+        if(rb2D.angularVelocity > maxAngularVelocity)
+        {
+            rb2D.angularVelocity = maxAngularVelocity;
+        }
+        if(rb2D.angularVelocity < -maxAngularVelocity)
+        {
+            rb2D.angularVelocity = -maxAngularVelocity;
         }
 
     }
 
-    public Vector2 GetRotation(){
-        return transform.right;
-    }
-
-    void ConfusedState(){
+    private void HandleConfusedState()
+    {
         rotation += Time.deltaTime * rotationPerSecond;
         transform.rotation = Quaternion.Euler(0, 0, rotation);
+    }
+
+    public Vector2 GetRotation()
+    {
+        return transform.right;
     }
 }
