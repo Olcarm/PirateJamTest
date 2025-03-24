@@ -54,13 +54,22 @@ public class WeaponVisual : MonoBehaviour
     private void RotateTowardsMouse()
     {
         Vector2 direction = (mousePos - transform.position).normalized;
-        /*
-        rb2D.rotation = angle;
-        */
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angleDifference = Mathf.DeltaAngle(rb2D.rotation, targetAngle);
+        float torqueAmount = Mathf.Clamp(angleDifference, -1f, 1f) * torque;
+
+        rb2D.AddTorque(torqueAmount);
+
+        if (Mathf.Abs(rb2D.angularVelocity) > maxAngularVelocity)
+        {
+            rb2D.angularVelocity = Mathf.Sign(rb2D.angularVelocity) * maxAngularVelocity;
+        }
+        /*
         float horizontal = Input.GetAxis("Horizontal");
-        rb2D.AddTorque(-torque * horizontal);
-        if(rb2D.angularVelocity > maxAngularVelocity)
+        rb2D.AddTorque(torque * horizontal);
+        
+        if (rb2D.angularVelocity > maxAngularVelocity)
         {
             rb2D.angularVelocity = maxAngularVelocity;
         }
@@ -68,7 +77,7 @@ public class WeaponVisual : MonoBehaviour
         {
             rb2D.angularVelocity = -maxAngularVelocity;
         }
-
+        */
     }
 
     private void HandleConfusedState()
