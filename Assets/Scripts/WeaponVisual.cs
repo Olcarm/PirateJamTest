@@ -5,7 +5,6 @@ public class WeaponVisual : MonoBehaviour
     private Vector3 mousePos;
     private Vector3 objectPos;
     private float angle;
-    private float rotation = 0;
 
     [SerializeField]
     private float rotationPerSecond;
@@ -82,8 +81,7 @@ public class WeaponVisual : MonoBehaviour
 
     private void HandleConfusedState()
     {
-        rotation += Time.deltaTime * rotationPerSecond;
-        transform.rotation = Quaternion.Euler(0, 0, rotation);
+        rb2D.rotation += rotationPerSecond * Time.fixedDeltaTime;
     }
 
     public Vector2 GetRotation()

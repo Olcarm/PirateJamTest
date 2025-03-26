@@ -29,8 +29,6 @@ public class Player : MonoBehaviour
 
     float timer;
 
-    
-
     /*
         [SerializeField]
         List<Weapons> weaponsList;
@@ -117,10 +115,12 @@ public class Player : MonoBehaviour
     }
 
 
-    bool IsGrounded()
+    private bool IsGrounded()
     {
-        return GetComponent<Rigidbody2D>().linearVelocityY == 0;
+
+        return FindFirstObjectByType<GroundCheck>().CheckGround();
     }
+    
 
     void TryToShoot()
     {

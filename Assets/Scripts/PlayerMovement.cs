@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Shoot(WeaponSO weaponSO)
     {
-        Vector2 forceVector = weaponVisual.GetRotation();
+        Vector2 forceVector = transform.right;
         rb2D.AddForce(-forceVector.normalized * weaponSO.thrust, ForceMode2D.Impulse);
         Debug.Log("Attacked: " + -forceVector.normalized * weaponSO.thrust);
     }
